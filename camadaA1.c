@@ -9,17 +9,25 @@
 #include <string.h>
 #include <sys/shm.h>
 #include <string.h>  
-
+#include <signal.h>
+ 
 #define tamanho_memoria 1024 //tamanho em bytes
+ 
+
+/* 
+
+    2ª camada de A
+
+*/
 
 typedef struct dados{
   long tipo;
   char mensagem[50]; // Dados que serão colocados na fila
 }mens;
 
-// Cria memória compartilhada
+  // Cria memória compartilhada
  char * memoria_compartilhada(){
-  key_t key = ftok("/Users/eduardojunio/Documents/Unb/2-2017/FSO/projeto1.c",'a');
+ key_t key = ftok("/Users/eduardojunio/Documents/Unb/2-2017/FSO/projeto1.c",'b');
 
   int id_memoria = shmget(key , tamanho_memoria, 0666 | IPC_CREAT);
 
@@ -35,21 +43,25 @@ int main() {
 
   char * memoria = memoria_compartilhada();
 
+ 
 while(1) {
-    int msqid;
-    mens recebe;
+      int msqid;
+      mens recebe;
+       //Gera uma chave única a partir de dados de um arquivo e um caracter.
+      key_t key = ftok("/Users/eduardojunio/Documents/Unb/2-2017/FSO/projeto1.c",'A');
+      // Cria a fila, retorna -1 para erro e em caso de sucesso retorna o identificador da fila
+      msqid = msgget(key, 0666 | IPC_CREAT); // 666 (escrita e leitura) , key: chave para acesso a fila
+   
+      msgrcv(msqid, &recebe, sizeof(recebe), 0, 0);
 
-    //Gera uma chave única a partir de dados de um arquivo e um caracter.
-    key_t key = ftok("/Users/eduardojunio/Documents/Unb/2-2017/FSO/projeto1.c",'b');
-  
-    // Cria a fila, retorna -1 para erro e em caso de sucesso retorna o identificador da fila
-    msqid = msgget(key, 0666 | IPC_CREAT); // 666 (escrita e leitura) , key: chave para acesso a fila
-  
-    msgrcv(msqid, &recebe, sizeof(recebe), 0, 0);
-    printf("===> Mensagem da fila : ");
-    printf("%s\n",recebe.mensagem);
-    strcpy(memoria,recebe.mensagem);
-    printf("%s\n",memoria); // tmp
+      printf("===> Mensagem da fila : ");
+      printf("%s\n",recebe.mensagem);
+      strcpy(memoria,recebe.mensagem);
+      
+      // printf("[Pressione enter para ver proxima mensagem!!]\n");
+      // getchar();
+      // exit(0);
+
 }
   return 0;
-}
+} 
