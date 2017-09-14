@@ -14,7 +14,6 @@
 typedef struct dados{
   long tipo;
   char mensagem[50]; // Dados que serão colocados na fila
-  int pid;
 }mens;
 
 int main() {
@@ -40,7 +39,7 @@ while(1){
       printf("Erro ao criar fila!!!\n");    
      }
 
-    printf("Enviando para camada [A N-1], fila de mensagem!!\n");
+    printf("Enviando para camada [A1], fila de mensagem!!\n");
     // printf("%s\n",msg.mensagem);
     msgsnd(id_fila, &msg, sizeof(msg), 0);// Identificador da fila, dados a ser colocado na fila, tamanho em bytes do dado
 

@@ -57,11 +57,12 @@ while(1) {
       printf("===> Mensagem da fila : ");
       printf("%s\n",recebe.mensagem);
       strcpy(memoria,recebe.mensagem);
-      
-      // printf("[Pressione enter para ver proxima mensagem!!]\n");
-      // getchar();
-      // exit(0);
 
+      /* 
+          printf("[Pressione enter para ver proxima mensagem!!]\n");
+          getchar();
+          exit(0); 
+      */
 }
   return 0;
 } 
